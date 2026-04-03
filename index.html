@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurora Finance Dashboard</title>
+    
+    <!-- SEO and Meta -->
+    <meta name="description" content="A dynamic and interactive finance dashboard for tracking your overall financial health, insights, and transactions.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="./styles.css">
+    
+    <!-- CDNs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <i data-lucide="gem"></i>
+                <span>Aurora</span>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><i data-lucide="layout-dashboard"></i> <span>Dashboard</span></li>
+                <li><i data-lucide="arrow-left-right"></i> <span>Transactions</span></li>
+                <li><i data-lucide="pie-chart"></i> <span>Analytics</span></li>
+                <li><i data-lucide="credit-card"></i> <span>Cards</span></li>
+            </ul>
+            <div class="sidebar-bottom">
+                <ul>
+                    <li><i data-lucide="settings"></i> <span>Settings</span></li>
+                    <li><i data-lucide="log-out"></i> <span>Logout</span></li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Header -->
+            <header class="top-header">
+                <div>
+                    <h1>Welcome back, <span class="accent">Alex</span></h1>
+                    <p class="subtitle">Here's what's happening with your finances today.</p>
+                </div>
+                
+                <div class="header-controls">
+                    <!-- Role Switcher -->
+                    <div class="role-switcher">
+                        <label for="roleSelect">Role:</label>
+                        <select id="roleSelect">
+                            <option value="viewer">Viewer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <button class="icon-btn tooltip" data-tooltip="Notifications">
+                        <i data-lucide="bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                    <div class="profile-avatar">
+                        <img src="https://ui-avatars.com/api/?name=Alex+Doe&background=8b5cf6&color=fff" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Summary Cards -->
+            <section class="summary-cards">
+                <div class="card glass-panel summary-card balance">
+                    <div class="card-icon"><i data-lucide="wallet"></i></div>
+                    <div class="card-details">
+                        <p class="label">Total Balance</p>
+                        <h2 id="totalBalance">$0.00</h2>
+                        <p class="trend positive"><i data-lucide="trending-up"></i> <span>+2.5%</span> this month</p>
+                    </div>
+                </div>
+                <div class="card glass-panel summary-card income">
+                    <div class="card-icon"><i data-lucide="arrow-down-left"></i></div>
+                    <div class="card-details">
+                        <p class="label">Total Income</p>
+                        <h2 id="totalIncome">$0.00</h2>
+                        <p class="trend positive"><i data-lucide="trending-up"></i> <span>+1.2%</span> this month</p>
+                    </div>
+                </div>
+                <div class="card glass-panel summary-card expense">
+                    <div class="card-icon"><i data-lucide="arrow-up-right"></i></div>
+                    <div class="card-details">
+                        <p class="label">Total Expenses</p>
+                        <h2 id="totalExpense">$0.00</h2>
+                        <p class="trend negative"><i data-lucide="trending-down"></i> <span>-4.8%</span> this month</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visualizations and Insights -->
+            <section class="visualizations">
+                <div class="chart-container glass-panel trend-chart">
+                    <div class="section-header">
+                        <h3>Cash Flow Trend</h3>
+                        <select id="timeRangeFilter" class="filter-select">
+                            <option value="6M">Last 6 Months</option>
+                            <option value="3M">Last 3 Months</option>
+                        </select>
+                    </div>
+                    <div class="canvas-wrapper">
+                        <canvas id="trendChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="side-panel">
+                    <!-- Categorical Chart -->
+                    <div class="chart-container glass-panel category-chart">
+                        <div class="section-header">
+                            <h3>Spending Breakdown</h3>
+                        </div>
+                        <div class="canvas-wrapper pie-wrapper">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Insights -->
+                    <div class="insights-panel glass-panel">
+                        <div class="section-header">
+                            <h3>Quick Insights <i data-lucide="sparkles" class="accent"></i></h3>
+                        </div>
+                        <ul class="insights-list" id="insightsList">
+                            <!-- Insights populated dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Transactions Section -->
+            <section class="transactions-section glass-panel">
+                <div class="section-header">
+                    <h3>Recent Transactions</h3>
+                    <div class="transaction-controls">
+                        <div class="search-box">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="transactionSearch" placeholder="Search...">
+                        </div>
+                        <select id="transactionFilter" class="filter-select">
+                            <option value="all">All Types</option>
+                            <option value="income">Income</option>
+                            <option value="expense">Expense</option>
+                        </select>
+                        <button id="addTransactionBtn" class="primary-btn hidden">
+                            <i data-lucide="plus"></i> Add New
+                        </button>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="transactions-table">
+                        <thead>
+                            <tr>
+                                <th>Name / Category</th>
+                                <th>Date <i data-lucide="chevron-down" class="sort-icon"></i></th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th class="admin-only hidden">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionList">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Adding/Editing Transaction (Admin Only) -->
+    <div id="transactionModal" class="modal hidden">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add Transaction</h3>
+                <button class="close-btn" id="closeModalBtn"><i data-lucide="x"></i></button>
+            </div>
+            <form id="transactionForm">
+                <input type="hidden" id="txId">
+                <div class="form-group">
+                    <label for="txName">Transaction Name</label>
+                    <input type="text" id="txName" required placeholder="e.g. Netflix Subscription">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="txAmount">Amount ($)</label>
+                        <input type="number" step="0.01" id="txAmount" required placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label for="txType">Type</label>
+                        <select id="txType" required>
+                            <option value="expense">Expense</option>
+                            <option value="income">Income</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="txCategory">Category</label>
+                        <select id="txCategory" required>
+                            <option value="Subscriptions">Subscriptions</option>
+                            <option value="Groceries">Groceries</option>
+                            <option value="Utilities">Utilities</option>
+                            <option value="Salary">Salary</option>
+                            <option value="Entertainment">Entertainment</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="txDate">Date</label>
+                        <input type="date" id="txDate" required>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="secondary-btn" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="primary-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./app.js"></script>
+</body>
+</html>
